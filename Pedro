@@ -1,0 +1,8 @@
+print ("Digite algo")
+let entrada : String? = readLine()
+guard let y = entrada {
+    print(y) 
+}
+else {
+    return false
+}
