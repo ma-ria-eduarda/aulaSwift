@@ -1,0 +1,161 @@
+var executando: Bool = true
+var tarefas: [String] = []
+
+func mostrarMenu() {
+    print("///////////Lista de Tarefas//////////////\n")
+    print("1. Adicionar Tarefa")
+    print("2. Remover Tarefa")
+    print("3. Listar Tarefas")
+    print("4. Editar Tarefa")
+    print("5. Favoritar Tarefa")
+    print("6. Sair do Programa")
+}
+
+func adicionarTarefa(n: [String], m: String) -> [String] {
+    var novaLista = n
+    if !m.isEmpty {
+        novaLista.append(m)
+        print("Tarefa adicionada!\n")
+    } else {
+        print("Tarefa não pode estar vazia!\n")
+    }
+    return novaLista
+}
+
+func removerTarefa(n: [String], m: String) -> [String] {
+    var novaLista = n
+    if let index = Int(m) {
+        if index > 0 && index <= novaLista.count {
+            let removida = novaLista.remove(at: index - 1)
+            print("Removida: \(removida)\n")
+        } else {
+            print("Índice inválido!\n")
+        }
+    } else {
+        print("Por favor, digite um número válido!\n")
+    }
+    return novaLista
+}
+
+func verTarefas(n: [String]) {
+    if !n.isEmpty {
+        print("Suas Tarefas: ")
+        for i in 0..<n.count {
+            print("\(i + 1). \(n[i])")
+        }
+    } else {
+        print("Nenhuma tarefa!\n")
+    }
+}
+
+func nomeTarefa(n: [String], m: String, nome: String) -> [String] {
+    var novaLista = n
+    if let index = Int(m) {
+        if index > 0 && index <= novaLista.count {
+            novaLista[index - 1] = nome
+            print("Alteração realizada com sucesso!\n")
+        } else {
+            print("Índice inválido!\n")
+        }
+    } else {
+        print("Por favor, digite um número válido!\n")
+    }
+    return novaLista
+}
+
+func favoritarTarefa(n: [String], m: String) -> [String] {
+    var novaLista = n
+    if let index = Int(m) {
+        if index > 0 && index <= novaLista.count {
+            // Se a tarefa já estiver favoritada, o comando a reverterá
+            if novaLista[index - 1].contains("❤️") {
+                novaLista[index - 1] = String(novaLista[index - 1].dropLast(2))
+                print("Tarefa \(index) desfavoritada!\n")
+            } else {
+                novaLista[index - 1] += " ❤️"
+                print("Tarefa \(index) favoritada!\n")
+            }
+        } else {
+            print("Índice inválido!\n")
+        }
+    } else {
+        print("Por favor, digite um número válido!\n")
+    }
+    return novaLista
+}
+
+while executando {
+    mostrarMenu()
+    print("\nDigite o número da opção desejada: ")
+    guard let entrada = readLine() else {
+        print("Valor inválido!\n")
+        continue
+    }
+    guard let opcao = Int(entrada) else {
+        print("Digite um número inteiro!\n")
+        continue
+    }
+    
+    switch opcao {
+    case 1:
+        print("///////////Adicionar Tarefa//////////////")
+        print("Digite a tarefa desejada: ")
+        if let novoNome = readLine() {
+            tarefas = adicionarTarefa(n: tarefas, m: novoNome)
+        } else {
+            print("Por favor, digite um valor válido!\n")
+        }
+        
+    case 2:
+        print("////////////Remover Tarefa///////////////")
+        print("Digite o índice da tarefa que deseja deletar: ")
+        if let indice = readLine() {
+            tarefas = removerTarefa(n: tarefas, m: indice)
+        } else {
+            print("Por favor, digite um valor válido!\n")
+        }
+        
+    case 3:
+        print("////////////Listar Tarefas///////////////")
+        verTarefas(n: tarefas)
+        
+    case 4:
+        print("///////////Editar o nome de uma Tarefa//////////////")
+        print("Digite o índice da tarefa que você deseja modificar: ")
+        if let numero = readLine() {
+            if Int(numero) != nil {
+                let index = Int(numero)! - 1
+                if index >= 0 && index < tarefas.count {
+                    print("Renomear '\(tarefas[index])' para: ")
+                    if let renomear = readLine() {
+                        tarefas = nomeTarefa(n: tarefas, m: numero, nome: renomear)
+                    } else {
+                        print("Por favor, digite um nome válido!\n")
+                    }
+                } else {
+                    print("Índice inválido!\n")
+                }
+            } else {
+                print("Por favor, digite um número inteiro!\n")
+            }
+        } else {
+            print("Por favor, digite um valor válido!\n")
+        }
+        
+    case 5:
+        print("///////////Favoritar Tarefa//////////////")
+        print("Digite o índice da tarefa que você deseja favoritar: ")
+        if let indiceFav = readLine() {
+            tarefas = favoritarTarefa(n: tarefas, m: indiceFav)
+        } else {
+            print("Por favor, digite um valor válido!\n")
+        }
+        
+    case 6: 
+        print("Saindo...\n")
+        executando = false
+        
+    default: 
+        print("Opção inválida! Por favor, escolha um número entre 1 e 6.\n")
+    }
+}
